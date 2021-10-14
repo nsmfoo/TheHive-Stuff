@@ -1,0 +1,27 @@
+{
+  "name": "Rapid7",
+  "version": "1.0",
+  "author": "Mikael Keri",
+  "url": "https://github.com/TheHive-Project/Cortex-Analyzers",
+  "license": "AGPL-V3",
+  "description": "Read metadata about a host from the collected Rapid7 data. So no scanning ...",
+  "dataTypeList": ["ip", "hostname", "fqdn"],
+  "baseConfig": "Rapid7",
+  "command": "Rapid7/rapid7.py",
+  "configurationItems": [
+    {
+      "name": "url",
+      "description": "The Rapid7 portal URL",
+      "type": "string",
+      "multi": false,
+      "required": true
+    },
+    {
+      "name": "api_key",
+      "description": "API Key (https://help.rapid7.com/insightvm/en-us/api/)",
+      "type": "string",
+      "multi": false,
+      "required": true
+    }
+  ]
+}

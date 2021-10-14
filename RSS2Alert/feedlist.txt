@@ -1,0 +1,7 @@
+https://krebsonsecurity.com/feed/
+https://www.bleepingcomputer.com/feed/
+https://securelist.com/feed/
+https://securityaffairs.co/wordpress/feed/
+https://nakedsecurity.sophos.com/feed/
+https://www.zdnet.com/blog/security/rss.xml
+https://www.darkreading.com/rss_simple.asp

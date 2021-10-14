@@ -1,0 +1,47 @@
+<div class="panel panel-primary" ng-if="success">
+    <div class="panel panel-heading"><strong>Rapid7 Vuln Lookup</strong></div>
+    {{content.result.title}}
+</div>
+<!-- General information  -->
+<div class="panel panel-info" ng-if="success">
+<table class="table" ng-if="content.result">
+            <thead>
+              <th>HOSTNAME:</th>
+              <th>OS:</th>
+               <th>RISKSCORE:</th>
+            </thead>
+        <tbody>
+            <tr>
+                <td>{{content.result.host.hostname}}</td>
+                <td>{{content.result.host.os}}</td>
+                <td>{{content.result.host.riskscore}}</td>
+            </tr>
+            </tbody>
+</table>
+
+<table class="table" ng-if="content.result">
+        <thead>
+            <th>Title</th>
+            <th>CVSS</th>
+        </thead>
+        <tbody ng-repeat="r in content.result">
+            <tr>
+                <td>{{r.title}}</td>
+                <td>{{r.cvss}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>    
+
+<!-- General error  -->
+<div class="panel panel-danger" ng-if="!success">
+<div class="panel-heading">
+    <strong>General Error: Please try again</strong>
+</div>
+<div class="panel-body">
+    <dl class="dl-horizontal" ng-if="content.errorMessage">
+        <dt><i class="fa fa-warning"></i> Rapid7: </dt>
+        <dd class="wrap">{{content.errorMessage}}"</dd>
+    </dl>
+</div>
+</div>
