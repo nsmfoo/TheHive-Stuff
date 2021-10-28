@@ -11,7 +11,7 @@
   "configurationItems": [
     {
       "name": "category_name",
-      "description": "Name of category to add to",
+      "description": "Name of category",
       "type": "string",
       "multi": false,
       "required": true
@@ -32,7 +32,7 @@
     },
     {
       "name": "api_key",
-      "description": "API key",
+      "description": "Zscaler API key",
       "type": "string",
       "multi": false,
       "required": true
@@ -46,7 +46,7 @@
     },
     {
       "name": "config_name",
-      "description": "Name of the URL category: <Company Blocklist X>",
+      "description": "Name of the Zscaler URL category, ex: <Company Blocklist X>",
       "type": "string",
       "multi": false,
       "required": true
