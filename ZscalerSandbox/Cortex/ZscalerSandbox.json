@@ -1,0 +1,81 @@
+{
+  "name": "ZscalerSandbox",
+  "author": "Mikael Keri",
+  "license": "AGPL-V3",
+  "url": "https://github.com/TheHive-Project/Cortex-Analyzers",
+  "version": "1.0",
+  "description": "Use the Zscaler Sandbox to analyze your observables. This analyzer requires a paid subscription to Zscaler ZIA",
+  "dataTypeList": ["file"],
+  "baseConfig": "ZscalerSandbox",
+  "config": {
+      "check_tlp": true,
+      "max_tlp": 2,
+      "check_pap": true,
+      "max_pap": 2
+   },
+  "command": "ZscalerSandbox/zscalersandbox.py",
+  "configurationItems": [
+    {
+      "name": "username",
+      "description": "Zscaler username",
+      "type": "string",
+      "multi": false,
+      "required": true
+    },
+    {
+      "name": "password",
+      "description": "Zscaler password",
+      "type": "string",
+      "multi": false,
+      "required": true
+    },
+    {
+      "name": "api_key",
+      "description": "API key",
+      "type": "string",
+      "multi": false,
+      "required": true
+    },
+    {
+      "name": "base_uri",
+      "description": "The base URL for your Zscaler subscription",
+      "type": "string",
+      "multi": false,
+      "required": true
+    },
+    {
+      "name": "sandbox_uri",
+      "description": "The sandbox URL for your Zscaler subscription",
+      "type": "string",
+      "multi": false,
+      "required": true
+    },
+    {
+      "name": "sandbox_token",
+      "description": "The sandbox token",
+      "type": "string",
+      "multi": false,
+      "required": true
+    },
+    {
+      "name": "zip_pw",
+      "description": "Default Zip archive password",
+      "type": "string",
+      "multi": false,
+      "required": true
+    }
+  ],
+   "registration_required": true,
+   "subscription_required": true,
+   "free_subscription": false,
+   "service_homepage": "https://www.zscaler.com/",
+   "service_logo": {"path":"assets/zscaler_logo.png", "caption": "logo"},
+   "screenshots": [
+     {"path":"assets/zscalersandbox_sample_long.png",
+       "caption":"Zscaler Sandbox full report"
+     },
+     {
+      "path": "assets/zscalersandbox_sample_short.png",
+      "caption:":"Zscaler Sandbox mini report"
+    }]
+}

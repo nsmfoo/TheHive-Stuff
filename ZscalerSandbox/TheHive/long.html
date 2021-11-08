@@ -1,0 +1,196 @@
+<div class="panel panel-info" ng-if="success">
+    <div class="panel-heading">
+        Zscaler Sandbox analyze of
+        <strong>{{artifact.attachment.name}}</strong>
+    </div>
+</div>
+<!-- Sample information -->
+<div class="panel panel-info" ng-if="success && content.result !== null">
+  <table style="width:100%">
+       <tr>
+            <th>Classification</th>
+            <th>Category</th>
+            <th>Score</th>
+            <th>Malware</th>
+        </tr>
+        <tr ng-repeat="x in content.result">
+                <td>{{x.Classification.Type || "-"}}</td>
+                <td>{{x.Classification.Category || "-"}}</td>
+                <td>{{x.Classification.Score || "-"}}/100</td>
+                <td>{{x.Classification.DetectedMalware || "-"}}</td>
+        </tr>
+    </table>
+ </div>  
+<div class="panel panel-info" ng-if="success && content.result !== null">
+  <table style="width:100%">
+        <tr>
+            <th>Filetype</th>
+            <th>Filesize(kb)</th>
+            <th>Certificate</th>
+            <th>Certificate Issuer</th>
+            <th>RootCA</th>
+        </tr>
+        <tr ng-repeat="x in content.result">
+            <td>{{x.FileProperties.FileType || "-"}}</td>
+            <td>{{x.FileProperties.FileSize || "-"}}</td>
+            <td>{{x.FileProperties.DigitalCerificate || "-"}}</td>
+            <td>{{x.FileProperties.Issuer || "-"}}</td>
+            <td>{{x.FileProperties.RootCA || "-"}}</td>
+        </tr>
+    </table>
+</div>
+<div class="panel panel-info" ng-if="success && content.result !== null">
+<div class="panel-heading">
+        System Summary
+</div>
+<table style="width:100%">
+ <span ng-repeat="x in content.result">
+    <div ng-repeat="z in x.SystemSummary">
+        <b>Risk: </b> {{z.Risk}}<br>
+        <b>Signature: </b> {{z.Signature}}<br>
+        <b>Signature Sources: </b>
+            <div ng-repeat="r in z.SignatureSources">
+            <ul>
+            <li ng-if="r">{{r}}</li>
+            </ul>
+            </div>
+        <br>
+ </span>
+</table>
+</div>
+
+<div class="panel panel-info" ng-if="success && content.result !== null">
+<div class="panel-heading">
+        Networking
+</div>
+<table style="width:100%">
+ <span ng-repeat="x in content.result">
+    <div ng-repeat="z in x.Networking">
+        <b>Risk: </b> {{z.Risk}}<br>
+        <b>Signature: </b> {{z.Signature}}<br>
+        <b>Signature Sources:</b><br>
+          <div ng-repeat="d in z.SignatureSources">
+            <ul>
+             <li ng-if="d">{{d}}</li>
+            </ul> 
+          </div>
+  </span>
+ </span>
+</table>
+</div>
+
+
+<div class="panel panel-info" ng-if="success && content.result !== null">
+<div class="panel-heading">
+        Security Bypass
+</div>
+<table style="width:100%">
+ <span ng-repeat="x in content.result">
+    <div ng-repeat="z in x.SecurityBypass">
+        <b>Risk: </b> {{z.Risk}}<br>
+        <b>Signature: </b> {{z.Signature}}<br>
+        <b>Signature Sources:</b><br>
+          <div ng-repeat="d in z.SignatureSources">
+            <ul>
+             <li ng-if="d">{{d}}</li>
+            </ul> 
+          </div>
+  </span>
+ </span>
+</table>
+</div>
+
+
+<div class="panel panel-info" ng-if="success && content.result !== null">
+<div class="panel-heading">
+        Exploit
+</div>
+<table style="width:100%">
+ <span ng-repeat="x in content.result">
+    <div ng-repeat="z in x.Exploit">
+        <b>Risk: </b> {{z.Risk}}<br>
+        <b>Signature: </b> {{z.Signature}}<br>
+        <b>Signature Sources:</b><br>
+          <div ng-repeat="d in z.SignatureSources">
+            <ul>
+             <li ng-if="d">{{d}}</li>
+            </ul> 
+          </div>
+  </span>
+ </span>
+</table>
+</div>
+
+<div class="panel panel-info" ng-if="success && content.result !== null">
+<div class="panel-heading">
+        Stealth
+</div>
+<table style="width:100%">
+ <span ng-repeat="x in content.result">
+    <div ng-repeat="z in x.Stealth">
+        <b>Risk: </b> {{z.Risk}}<br>
+        <b>Signature: </b> {{z.Signature}}<br>
+        <b>Signature Sources:</b><br>
+          <div ng-repeat="d in z.SignatureSources">
+            <ul>
+             <li ng-if="d">{{d}}</li>
+            </ul> 
+          </div>
+  </span>
+ </span>
+</table>
+</div>
+
+
+<div class="panel panel-info" ng-if="success && content.result !== null">
+<div class="panel-heading">
+        Persistence
+</div>
+<table style="width:100%">
+ <span ng-repeat="x in content.result">
+    <div ng-repeat="z in x.Persistence">
+        <b>Risk: </b> {{z.Risk}}<br>
+        <b>Signature: </b> {{z.Signature}}<br>
+        <b>Signature Sources:</b><br>
+          <div ng-repeat="d in z.SignatureSources">
+            <ul>
+             <li ng-if="d">{{d}}</li>
+            </ul> 
+          </div>
+  </span>
+ </span>
+</table>
+</div>
+
+<div class="panel panel-info" ng-if="success && content.result !== null">
+<div class="panel-heading">
+        Spreading
+</div>
+<table style="width:100%">
+ <span ng-repeat="x in content.result">
+    <div ng-repeat="z in x.Spreading">
+        <b>Risk: </b> {{z.Risk}}<br>
+        <b>Signature: </b> {{z.Signature}}<br>
+        <b>Signature Sources:</b><br>
+          <div ng-repeat="d in z.SignatureSources">
+            <ul>
+             <li ng-if="d">{{d}}</li>
+            </ul> 
+          </div>
+  </span>
+ </span>
+</table>
+</div>
+
+<!-- General error  -->
+<div class="panel panel-danger" ng-if="!success">
+    <div class="panel-heading">
+        <strong>{{(artifact.data) | fang}}</strong>
+    </div>
+    <div class="panel-body">
+    	<dl class="dl-horizontal" ng-if="content.errorMessage">
+            <dt><i class="fa fa-warning"></i> ZscalerSandbox: </dt>
+            <dd class="wrap">{{content.errorMessage}}</dd>
+        </dl>
+    </div>
+</div>
