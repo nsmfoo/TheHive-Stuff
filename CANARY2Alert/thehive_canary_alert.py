@@ -3,31 +3,61 @@
 
 from __future__ import print_function
 from __future__ import unicode_literals
-
 import requests
 import sys
 import json
-import time
-from datetime import datetime, timedelta
 import uuid
-from datetime import date
 from thehive4py.api import TheHiveApi
 from thehive4py.models import Alert, AlertArtifact, CustomFieldHelper
 
-
 def create_alert(canary):
-    # Hmm.. looks crazy, should of course re-write ..
-    description =  "Incident date: " + str(canary[0]) + "\n\n" + "Attack Type: " + str(canary[1]) + "\n\n" + "Targeted Canary IP: " + str(canary[2]) + "\n\n" + "Flock: " + str(canary[3]) + "\n\n" + "Targeted Canary hostname: " + str(canary[4])  + "\n\n" + "Attacker IP: " + str(canary[5])  + "\n\n" + "Attacker Hostname: " + str(canary[6])  + "\n\n" + "Attacker Src Port: " + str(canary[7])
-    
+    i= 0
+    canary_data = []
+    labels = ['Incident date','Flock','Canary Name','AttackType','Targeted Canary IP','Targeted Canary Port','Attacker IP','Attacker Hostname','Attacker Src Port']
+    label_len = len(str(labels))
+    ii = 0
+    label_padd = ''
+    while ii < label_len:
+        label_padd = label_padd + '-'
+        ii += 1
+    while i < 9:
+        canary_data.append('**' + labels[i] + ':** ' + str(canary[i]) + '\n\n')
+        i += 1
+    # For canary tokens include extra data
+    if canary[3] == 'Canarytoken triggered':
+        canary_data.append('**Memo: **'+ canary[10] +'\n\n')
+    # Handle the event data
+    # The header
+    for event in canary[9]:
+        for y in event.keys():
+            canary_data.append('|'+ str(y).lower())
+        canary_data.append('|\n|' + str(label_padd) + '|\n')
+        # The content
+        if canary[3] == 'Canarytoken triggered':
+            for z in event.values():
+                if isinstance(z, dict):
+                    zz_top = []
+                    for zz_k,zz_v in z.items():
+                        zz_top.append(''.join(str(zz_k) + ': ' + str(zz_v)))
+                    canary_data.append('|' + ' '.join(zz_top))
+                else:
+                    canary_data.append('|'+ str(z))
+            canary_data.append('|\n\n')
+        else:
+            for z in event.values():
+                canary_data.append('|'+ str(z))
+            canary_data.append('|\n\n')
+
+    description = ''.join(canary_data)
     artifacts = [
-      AlertArtifact(dataType='ip', data=str(canary[5])),
+      AlertArtifact(dataType='ip', data=str(canary[6])),
     ]
 
     # Prepare the Alert
     sourceRef = str(uuid.uuid4())[0:6]
     alert = Alert(title='New Alert',
            tlp=3,
-           tags=['canary_alert', 'attack_type=' + str(canary[1])],
+           tags=['canary_alert', 'attack_type=' + str(canary[3])],
            description=description,
            severity=4,
            caseTemplate='New Canary alert',
@@ -45,46 +75,78 @@ def create_alert(canary):
           print('ko: {}/{}'.format(response.status_code, response.text))
           sys.exit(0)
 
-# Prepare stuff
-api = TheHiveApi('TheHive-URL', 'API-KEY')
-# Get latest ID, using ID enables us to check more often and we don't have to care about time diff between checks
-# Waldo file
-with open('canary_id.txt','r') as f:
-     value = sum(map(int, f))
-f.close()
+# General settings
+canary_base_url = 'https://<XXXXXX>.canary.tools/api/v1/'
+api = TheHiveApi('<TheHive-URL>', '<API-KEY>')
+token = '<CANARY TOKEN>'
 
-# Canary URL
-url = 'https://<XXXXX>/api/v1/incidents/all'
+# Impossible to write a script without a ascii banner..
+print("""
+                              .*******************.
+                        ********************************     ((((((
+                    /***********************************  (((((((((((
+                 **************************************   ((((((((((((
+               ****************************************   ((((((((((((
+             *******************************************    ((((((((
+           ************************************************          #
+          *************************/         **************************
+         ***********************                  **********************
+        *********************/                            ***************
+       *********************                        *********************#
+       ********************                       ************************
+       ******************(                       *************************
+      /******************                        *************************
+       *****************                        **************************
+       *************                            **************************
+       ***********                              **************************
+        *******                                  ************************
+         ****,                                   ***********************
+          *                                      **********************
+                                                 ********************(
+                    Canary2TheHive                      Mikael Keri
+""")
+
+# Retrive all new alerts
+url = canary_base_url + 'incidents/unacknowledged'
 payload = {
-        'auth_token': 'CANARY API TOKEN',
-        'limit':'1',
-        'incidents_since':value
+        'auth_token': token,
         }
 
 r = requests.get(url, params=payload)
 result = r.json()
 
-canary = []
-try:
-    for a in result['incidents']:
-        canary.append(a['description'].get('created_std'))
-        canary.append(a['description'].get('description'))
-        canary.append(a['description'].get('dst_host'))
-        canary.append(a['description'].get('flock_name'))
-        canary.append(a['description'].get('name'))
-        canary.append(a['description'].get('src_host'))
-        canary.append(a['description'].get('src_host_reverse'))
-        canary.append(a['description'].get('src_port'))
-        canary.append(a['hash_id'])
+print('Working ...')
 
-    # Update the ID waldo file
-    if result['max_updated_id']:
-       value+= 1
-       with open('canary_id.txt','w') as f:
-            f.write(str(value))
-except:
-    print('No new alerts!')
-    f.close()
-    exit()
+for flock in result['incidents']:
+    canary = []
+    canary.append(flock['description'].get('created_std'))
+    canary.append(flock['description'].get('flock_name'))
+    canary.append(flock['description'].get('name'))
+    canary.append(flock['description'].get('description'))
+    canary.append(flock['description'].get('dst_host'))
+    canary.append(flock['description'].get('dst_port'))
+    canary.append(flock['description'].get('src_host'))
+    canary.append(flock['description'].get('src_host_reverse'))
+    canary.append(flock['description'].get('src_port'))
+    canary.append(flock['description'].get('events'))
+    canary.append(flock['description'].get('memo'))
 
-create_alert(canary)
+    # Retrive the incident ID
+    int_id = flock['id']
+
+    # Acknowledge the alert, keep the portal clean
+    url_ack = canary_base_url + 'incident/acknowledge'
+    payload_ack = {
+          'auth_token': token,
+          'incident':  int_id
+    }
+    ack = requests.post(url_ack, params=payload_ack)
+    ack_result = ack.json()
+    if ack_result['result'] == 'success':
+       print('incident acknowledged')
+    else:
+       print('unable to acknowledge incident :/')
+
+    create_alert(canary)
+    time.sleep(3)
+print('Done')
