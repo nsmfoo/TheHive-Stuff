@@ -39,32 +39,28 @@ for x in feed_list:
         clean = re.compile('<.*?>')
         content = re.sub(clean, '', entry.summary)
 
-        # Check post for certain keywords (check content instead.. keywords sucks)
-        keywords = ['ransomware', '0-day', 'worm', 'APT', 'exploit', 'breach', 'hacked', 'CVE']
-        y = 0
+        # Check subject for certain keywords
+        keywords = ['ransomware', '0-day', 'worm', 'breach', 'APT', 'exploit', 'hacked', 'CVE','malware']
         try:
-            for x in entry.tags:
-             if any(x == entry.tags[y].term.lower() for x in keywords):
+            for x in keywords:
+             if x.lower() in article_title:
                 sev = 2
              else:
                 sev = 1
-             y += 1
         except:
             sev = 1
 
         today_date = datetime.datetime.now()
         today = today_date.strftime("%a, %d %b %Y")
         if today in article_published_at:
-
             cve_data = re.findall('CVE-[0-9]{4}-[0-9]{5}', content, flags=re.IGNORECASE)
-
             artifacts = [
                 AlertArtifact(dataType='cve', data=cve_data),
             ]
 
         # Prepare the Alert
             sourceRef = str(uuid.uuid4())[0:6]
-            alert = Alert(title='New Alert',
+            alert = Alert(title=article_title,
                 tlp=2,
                 tags=['vuln_news', domain_name],
                 description=content + " URL: "  + article_link,
