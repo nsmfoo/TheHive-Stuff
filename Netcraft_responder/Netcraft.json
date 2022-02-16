@@ -1,0 +1,26 @@
+{
+  "name": "NetcraftPhishingSubmit",
+  "version": "1.0",
+  "author": "Mikael Keri",
+  "url": "https://github.com/TheHive-Project/",
+  "license": "AGPL-V3",
+  "description": "When you are sure, submit it to Netcraft for 'global' blocking",
+  "dataTypeList": ["thehive:case_artifact"],
+  "command": "Netcraft_responder/netcraft.py",
+  "baseConfig": "Netcraft",
+  "configurationItems": [
+    {
+      "name": "email",
+      "description": "Email address to which the result is reported",
+      "type": "string",
+      "multi": false,
+      "required": true
+    },
+    {
+      "name": "reason",
+      "description": "It might be nice to add something like: Verified to be a phishing site by a human",
+      "type": "string",
+      "multi": false
+     }
+  ]
+}
